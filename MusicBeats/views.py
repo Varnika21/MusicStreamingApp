@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from MusicBeats.models import Song,Watchlater,History
+from MusicBeats.models import Song,Watchlater,History,Channel
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
 from django.db.models import Case,When
@@ -89,6 +89,9 @@ def signup(request):
         from django.contrib.auth import login
         login(request, user)
 
+        channel = Channel(name = username)
+        channel.save()
+
         return redirect('/')
     return render(request,'MusicBeats/signup.htm')
 
@@ -96,3 +99,24 @@ def signup(request):
 def logout_user(request):
     logout(request)
     return redirect("/")
+
+def channel(request,channel):
+    chan = Channel.objects.filter(name=channel).first()
+    return render(request,"MusicBeats/channel.htm",{'channel' : chan})
+
+
+def upload(request):
+    if request.method == "POST":
+        name = request.POST['name']
+        singer = request.POST['singer']
+        movie = request.POST['movie']
+        genre = request.POST['genre']
+        credit = request.POST['credit']
+        image = request.POST['image']
+        song1 = request.FILES['file']
+
+        song_model = Song(name = name,image = image,singer = singer,genre = genre,movie = movie,credit = credit,song = song1)
+        song_model.save()
+
+
+    return render(request,"MusicBeats/upload.htm")

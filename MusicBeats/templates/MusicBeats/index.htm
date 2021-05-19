@@ -34,24 +34,30 @@
             <img src="/media/{{i.image}}" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">{{i.name}}</h5>
-              <p class="card-text">{{i.tags}}</p>
+              <p class="card-text">Genre : {{i.tags}}</p>
+              <p class="card-text">Movie : {{i.movie}}</p>
               <a href="/MusicBeats/songs/{{i.song_id}}" class="btn btn-primary">Play</a>
             </div>
         </div>
        {% endfor %}
       </div>
 
-      <h2 style="padding-left: 8%; padding-top: 2%; font-family: 'lucida sans';">What's New!!</h2>
-      <div class="row" style="padding-top: 2%;padding-left: 7%;">
-        <div class="card" style="width: 18rem;">
-            <img src="{% static '/MusicBeats/music.jpg'%}" class="card-img-top" alt="...">
+      <h2 style="padding-left: 8%; padding-top: 2%; font-family: 'lucida sans';">Your Listen Later</h2>
+      <div class="row" style="padding-top: 2%; padding-left: 7%;">
+       {% for i in watch reversed %}
+        <div class="card mx-auto" style="width: 18rem;">
+            <img src="/media/{{i.image}}" class="card-img-top" alt="...">
             <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <h5 class="card-title">{{i.name}}</h5>
+              <p class="card-text">Genre : {{i.tags}}</p>
+              <p class="card-text">Movie : {{i.movie}}</p>
               <a href="/MusicBeats/songs/{{i.song_id}}" class="btn btn-primary">Play</a>
             </div>
         </div>
+       {% endfor %}
       </div>
+
+      
 
       <h2 style="padding-left: 8%; padding-top: 2%; font-family: 'lucida sans';">What's New!!</h2>
       <div class="row" style="padding-top: 2%;padding-left: 7%;">
