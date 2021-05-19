@@ -4,8 +4,15 @@
 
 {% block body %}
 {% load static %}
-<h1 style="color:maroon(158, 60, 60); text-align: center;">Listen Later</h1>
-{% for i in song reversed %}
+<h1 style="color: maroon; text-align: center;">Listen Later</h1>
+
+
+{% if song|length < 1 %}
+<h1 style="text-align: center; padding-top:5% ;color: midnightblue;"> Your Listen Later is empty </h1>
+{% endif %}
+
+<div class="container">
+  {% for i in song reversed %}
 
 <div class="card mb-3" style="max-width: 940px;padding-top: 3%;">
     <div class="row no-gutters">
@@ -22,4 +29,5 @@
     </div>
   </div>
   {% endfor %}
+</div>
 {% endblock %}
