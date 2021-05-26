@@ -68,7 +68,7 @@ def login(request):
         user = authenticate(username=username, password=password )
         from django.contrib.auth import login
         login(request, user)
-        redirect('/')
+        return redirect('/')
 
     return render(request,'MusicBeats/login.htm')
 
@@ -95,6 +95,13 @@ def signup(request):
         return redirect('/')
     return render(request,'MusicBeats/signup.htm')
 
+def search(request):
+    query = request.GET.get("query")
+    song = Song.objects.all()
+
+    qs = song.filter(name__icontains = query)
+    return render(request,"MusicBeats/search.htm",{"songs" : qs,"query" : query})
+
 
 def logout_user(request):
     logout(request)
@@ -102,6 +109,11 @@ def logout_user(request):
 
 def channel(request,channel):
     chan = Channel.objects.filter(name=channel).first()
+    video_ids = str(chan.music).split(" ")[1:]
+
+    preserved = Case(*[When(pk=pk, then=pos) for pos,pk in enumerate(video_ids)])
+    song = Song.objects.filter(song_id__in=video_ids).order_by(preserved)
+
     return render(request,"MusicBeats/channel.htm",{'channel' : chan})
 
 
@@ -117,6 +129,13 @@ def upload(request):
 
         song_model = Song(name = name,image = image,singer = singer,genre = genre,movie = movie,credit = credit,song = song1)
         song_model.save()
+
+        music_id = song_model.song_id
+        channel_find = Channel.objects.filter(name = str(request.user))
+
+        for i in channel_find:
+            i.music += f" {music_id}"
+            i.save()
 
 
     return render(request,"MusicBeats/upload.htm")

@@ -1,12 +1,13 @@
 {% extends 'MusicBeats/basic.htm' %}
-{% block title %}Channel{% endblock %}
+{% block title %}Search{% endblock %}
 
 
 {% block body %}
-
-<h2 style="text-align: center; padding-top: 2%; color: navy;">{{channel.name}}</h2>
-<div class="container">
-{% for i in song reversed %}
+<div class="container" style ="padding-top: 1%;">
+    <div style="padding-top: 3%; padding-bottom: 2%; font-size: 150% ; color: darkviolet;">
+        Your search result for {{query}}: 
+    </div>
+{% for i in songs reversed %}
 
 <div class="card mb-3" style="max-width: 940px;padding-top: 3%;">
     <div class="row no-gutters">
