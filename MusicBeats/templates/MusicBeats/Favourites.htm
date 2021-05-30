@@ -1,0 +1,33 @@
+{% extends 'MusicBeats/basic.htm' %}
+{% block title %}Favourites{% endblock %}
+
+
+{% block body %}
+{% load static %}
+<h1 style="color: maroon; text-align: center;">Favourites</h1>
+
+
+{% if song|length < 1 %}
+<h1 style="text-align: center; padding-top:5% ;color: midnightblue;"> Your Favourites is empty </h1>
+{% endif %}
+
+<div class="container">
+  {% for i in song reversed %}
+
+<div class="card mb-3" style="max-width: 940px;padding-top: 3%;">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img src="{{i.image}}" class="card-img" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title" style="color: green; font-weight: 550;">{{i.name}}</h5>
+          <p class="card-text">{{i.tags}}</p>
+          <a href="/MusicBeats/songs/{{i.song_id}}"><button class= "btn btn-primary">Play</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

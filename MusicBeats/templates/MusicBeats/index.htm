@@ -36,7 +36,7 @@
       <div class="row" style="padding-top: 2%; padding-left: 7%;">
        {% for i in song %}
         <div class="card mx-auto" style="width: 18rem;">
-            <img src="/media/{{i.image}}" class="card-img-top" alt="...">
+            <img src="{{i.image}}" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">{{i.name}}</h5>
               <p class="card-text">Genre : {{i.tags}}</p>
@@ -58,7 +58,29 @@
       <div class="row" style="padding-top: 2%; padding-left: 7%;">
        {% for i in watch reversed %}
         <div class="card mx-auto" style="width: 18rem;">
-            <img src="/media/{{i.image}}" class="card-img-top" alt="...">
+            <img src="{{i.image}}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{i.name}}</h5>
+              <p class="card-text">Genre : {{i.tags}}</p>
+              <p class="card-text">Movie : {{i.movie}}</p>
+              {% if user.is_authenticated %}
+          <form action='/MusicBeats/history' method="POST">{% csrf_token %}
+           <input type="hidden" name="music_id" value="{{i.song_id}}">
+            <a href="/MusicBeats/songs/{{i.song_id}}"><button class= "btn btn-primary">Play</button></a>
+          </form>
+          {% else %}
+          <a href="/MusicBeats/songs/{{i.song_id}}"><button class= "btn btn-primary">Play</button></a>
+          {% endif %}
+            </div>
+        </div>
+       {% endfor %}
+      </div>
+
+      <h2 style="padding-left: 8%; padding-top: 2%; font-family: 'lucida sans';">Your Favourites</h2>
+      <div class="row" style="padding-top: 2%; padding-left: 7%;">
+       {% for i in fav reversed %}
+        <div class="card mx-auto" style="width: 18rem;">
+            <img src="{{i.image}}" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">{{i.name}}</h5>
               <p class="card-text">Genre : {{i.tags}}</p>
@@ -78,22 +100,5 @@
 
       
 
-      <h2 style="padding-left: 8%; padding-top: 2%; font-family: 'lucida sans';">What's New!!</h2>
-      <div class="row" style="padding-top: 2%;padding-left: 7%;">
-        <div class="card" style="width: 18rem;">
-            <img src="{% static '/MusicBeats/music.jpg'%}" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              {% if user.is_authenticated %}
-          <form action='/MusicBeats/history' method="POST">{% csrf_token %}
-           <input type="hidden" name="music_id" value="{{i.song_id}}">
-            <a href="/MusicBeats/songs/{{i.song_id}}"><button class= "btn btn-primary">Play</button></a>
-          </form>
-          {% else %}
-          <a href="/MusicBeats/songs/{{i.song_id}}"><button class= "btn btn-primary">Play</button></a>
-          {% endif %}
-            </div>
-        </div>
-      </div>
+      
 {% endblock %}

@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from MusicBeats.models import Song,Watchlater,History,Channel
+from MusicBeats.models import Song,Watchlater,History,Channel,Favourites
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, logout
 from django.db.models import Case,When
@@ -52,7 +52,37 @@ def watchlater(request):
     song = Song.objects.filter(song_id__in=ids).order_by(preserved)
 
     return render(request,"MusicBeats/Watchlater.htm", {'song': song})
+def favourites(request):
+    if request.method == "POST":
+        user = request.user
+        fav_song_id = request.POST['fav_song_id']
 
+        fav = Favourites.objects.filter(user=user)
+        
+        for i in fav:
+            if fav_song_id == i.fav_song_id:
+                message = "Your song is already added"
+                break
+        else:                   
+            favourites = Favourites(user = user, fav_song_id = fav_song_id)
+            favourites.save()
+            message = "Your song is added to favourites"
+
+    
+    
+        song = Song.objects.filter(song_id = fav_song_id).first()
+        return render(request,f"MusicBeats/songpost.htm",{'song': song, "message": message})
+    
+    f1 = Favourites.objects.filter(user=request.user)
+    ids = []
+    for i in f1:
+        ids.append(i.fav_song_id)
+
+    preserved = Case(*[When(pk=pk, then=pos) for pos,pk in enumerate(ids)])
+    song = Song.objects.filter(song_id__in=ids).order_by(preserved)
+
+    return render(request,"MusicBeats/Favourites.htm", {'song': song})
+    
 
 
 def songs(request):
@@ -100,6 +130,7 @@ def search(request):
     song = Song.objects.all()
 
     qs = song.filter(name__icontains = query)
+
     return render(request,"MusicBeats/search.htm",{"songs" : qs,"query" : query})
 
 
@@ -114,7 +145,7 @@ def channel(request,channel):
     preserved = Case(*[When(pk=pk, then=pos) for pos,pk in enumerate(video_ids)])
     song = Song.objects.filter(song_id__in=video_ids).order_by(preserved)
 
-    return render(request,"MusicBeats/channel.htm",{'channel' : chan})
+    return render(request,"MusicBeats/channel.htm",{'channel' : chan, 'song' : song})
 
 
 def upload(request):
